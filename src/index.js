@@ -13,7 +13,7 @@ const frasi = [
   "Inoltro tutti i i messaggi che ricevo senza verificarne la veridicità",
   "Basta poco per farmi arrabbiare",
   "A Volte penso che tutto questo non finirà per tanto tempo/durerà troppo a lungo",
-  "Evito di mangiare spesso quelle cose buona ma che fanno male",
+  "Evito di mangiare spesso quelle cose buone ma che fanno male",
   "Approfondisco la veridicità delle notizie che ricevo",
   "Mi confronto con i miei amici su questa situazione",
   "Non invio bufale",
@@ -55,6 +55,13 @@ class Example extends React.Component {
 
   render() {
     const { items, finished, selected } = this.state;
+    const pauraCount = selected.filter(x => x < 5).length
+    const apprendimentoCount = selected.filter(x => x >= 5 && x < 10).length
+    const crescitaCount = selected.filter(x => x >= 10).length
+    const maxZone = [{ name: 'paura', count: pauraCount }, { name: 'apprendimento', count: apprendimentoCount }, { name: 'crescita', count: crescitaCount }].reduce((acc, cur) => {
+      if(!acc) return cur
+      else return cur.count > acc.count ? cur : acc
+    }, null)
 
     return (
       <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'center', marginVertical: 20 }}>
@@ -64,10 +71,12 @@ class Example extends React.Component {
           : 'Seleziona le frasi in cui ti ritrovi'}
         </h2>
         {finished && <React.Fragment>
-          <p>{selected.filter(x => x < 5).length}/5 zona di paura</p>
-          <p>{selected.filter(x => x >= 5 && x < 10).length}/5 zona di apprendimento</p>
-          <p>{selected.filter(x => x >= 10).length}/8 zona di crescita</p>
+          <h4>Sei nella zona {maxZone.name}</h4>
+          <p>{pauraCount}/5 zona di paura</p>
+          <p>{apprendimentoCount}/5 zona di apprendimento</p>
+          <p>{crescitaCount}/8 zona di crescita</p>
         </React.Fragment>}
+        {finished && <h4>Ecco in quale zona sono posizionate le varie affermazioni</h4>}
         {!finished &&
           <ul>
             <PoseGroup>{items.map(id => <Item key={id} className={[
@@ -107,7 +116,7 @@ class Example extends React.Component {
               </Item>)}</PoseGroup>
             </ul>
           </React.Fragment>}
-          {!finished && <input type='text' placeholder={`Nome e unità`} onChange={event => this.setState({nome: event.target.value})}></input>}
+        {!finished && <input type='text' placeholder={`Nome e unità`} onChange={event => this.setState({ nome: event.target.value })}></input>}
         {!finished && <button disabled={!this.state.nome || !this.state.selected.length} onClick={this.handleFinished}>Fatto!</button>}
       </div>
     );
