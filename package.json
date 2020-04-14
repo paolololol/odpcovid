@@ -7,7 +7,7 @@
   "homepage": "https://paolololol.github.io/odpcovid",
   "dependencies": {
     "react": "16.3.2",
-    "react-dom": "16.3.2",
+    "react-dom": "16.3.3",
     "react-pose": "3.0.0",
     "react-scripts": "1.1.4"
   },
